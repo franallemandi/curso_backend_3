@@ -105,9 +105,10 @@ describe("Test de Adoptions API", function () {
     });
     after(async function () {
         try {
-            await mongoose.collection("users").drop();
-            await mongoose.collection("pets").drop();
-            await mongoose.collection("adoptions").drop();
+            await AdoptionModel.deleteMany({});
+            await PetModel.deleteMany({});
+            await UserModel.deleteMany({});
+            await mongoose.connection.close();
         } catch (error) {
             console.error("Error al limpiar la base de datos:", error.message);
         }
