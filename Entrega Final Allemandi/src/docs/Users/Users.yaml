@@ -1,0 +1,217 @@
+openapi: 3.0.1
+info:
+  title: AdoptMe Users API
+  version: 1.0.0
+  description: Documentación de endpoints de usuarios
+
+paths:
+  /api/users:
+    get:
+      summary: Obtiene todos los usuarios
+      description: Obtiene una lista de todos los usuarios registrados en el sistema
+      tags:
+        - Users
+      responses:
+        "200":
+          description: Lista de usuarios obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/users/{uid}:
+    get:
+      summary: Obtiene un usuario por ID
+      description: Obtiene un usuario específico utilizando su ID único (uid)
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Usuario obtenido correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      summary: Actualiza un usuario
+      description: Actualiza la información de un usuario específico utilizando su ID único (uid)
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: ID único del usuario
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/updateUser'
+      responses:
+        "200":
+          description: Usuario actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Elimina un usuario
+      description: Elimina un usuario específico utilizando su ID único (uid)
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Usuario eliminado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: ID único del usuario
+        first_name:
+          type: string
+          description: Nombre del usuario
+        last_name:
+          type: string
+          description: Apellido del usuario
+        email:
+          type: string
+          description: Correo electrónico del usuario
+        password:
+          type: string
+          description: Contraseña del usuario
+        role:
+          type: string
+          description: Rol del usuario
+        pets:
+          type: array
+          items:
+            type: string
+          description: Lista de IDs de mascotas asociadas al usuario
+      example:
+        _id: 64a1f0c2e5b0c8a1b2c3d4e
+        first_name: Franco
+        last_name: Allemandi
+        email: franco_allemandi@hotmail.com
+        password: password123
+        role: admin
+        pets: ["64a1f0c2e5b0c8a1b2c3d4f", "64a1f0c2e5b0c8a1b2c3d50"]
+    Users:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
+      example:
+        [
+          {
+            _id: 64a1f0c2e5b0c8a1b2c3d4e,
+            first_name: Franco,
+            last_name: Allemandi,
+            email: franco_allemandi@hotmail.com,
+            password: password123,
+            role: admin,
+            pets: ["64a1f0c2e5b0c8a1b2c3d4f", "64a1f0c2e5b0c8a1b2c3d50"]
+          },
+          {
+            _id: 64a1f0c2e5b0c8a1b2c3d51,
+            first_name: Maria,
+            last_name: Garcia,
+            email: maria_garcia@gmail.com,
+            password: password456,
+            role: user,
+            pets: ["64a1f0c2e5b0c8a1b2c3d52"]
+          }
+        ]
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensaje de error
+      example:
+        message: Usuario no encontrado
+
+
+  requestBodies:
+    updateUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: Franco
+        last_name:
+          type: string
+          example: Allemandi
+        email:
+          type: string
+          example: franco@email.com
+        role:
+          type: string
+          example: admin
