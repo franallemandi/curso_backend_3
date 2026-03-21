@@ -18,7 +18,7 @@ const swaggerOpts = {
     definition:{
         openapi:'3.0.1',
         info:{
-            title:'AdoptMe API',
+            title:'AdoptMe API test',
             description:'Documentación de usuarios'
         }
     },
